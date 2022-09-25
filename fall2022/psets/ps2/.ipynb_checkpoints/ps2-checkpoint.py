@@ -105,15 +105,14 @@ class BinarySearchTree:
         if self.key is None:
             self.key = key
         elif self.key > key: 
-            self._size += 1
             if self.left is None:
                 self.left = BinarySearchTree(self.debugger)
             self.left.insert(key)
         elif self.key < key:
-            self._size += 1
             if self.right is None:
                 self.right = BinarySearchTree(self.debugger)
             self.right.insert(key)
+        self.calculate_sizes()
         return self
 
     
@@ -141,91 +140,46 @@ class BinarySearchTree:
        11 
     '''
     def rotate(self, direction, child_side):
-        root_size = 0
-        pivot_size = 0
         if direction == "R" and child_side == "R":
             if self.right is not None:
                 if self.right.left is not None:
-                    root_size = self.right._size
-                    pivot_size = root_size
-                    if self.right.left is not None:
-                        pivot_size -= self.right.left._size
-                    if self.right.left.right is not None:
-                        pivot_size += self.right.left.right._size
-                    
                     temp = self.right
                     self.right = self.right.left
                     temp.left = None
                     if self.right.right is not None:
                         temp.left = self.right.right
                     self.right.right = temp
-
-                    self.right._size = root_size
-                    self.right.right._size = pivot_size
                     
         elif direction == "R" and child_side == "L":
             if self.left is not None:
                 if self.left.left is not None:
-                    root_size = self.left._size
-                    pivot_size = root_size
-                    if self.left.left is not None:
-                        pivot_size -= self.left.left._size
-                    if self.left.left.right is not None:
-                        pivot_size += self.left.left.right._size
-                    
                     temp = self.left
                     self.left = self.left.left
                     temp.left = None
                     if self.left.right is not None:
                         temp.left = self.left.right
                     self.left.right = temp
-
-                    self.left._size = root_size
-                    self.left.right._size = pivot_size
         
         elif direction == "L" and child_side == "L":
             if self.left is not None:
                 if self.left.right is not None:
-                    root_size = self.left._size
-                    pivot_size = root_size
-                    if self.left.right is not None:
-                        pivot_size -= self.left.right._size
-                    if self.left.right.left is not None:
-                        pivot_size += self.left.right.left._size
-
                     temp = self.left
                     self.left = self.left.right
                     temp.right = None
                     if self.left.left is not None:
                         temp.right = self.left.left
                     self.left.left = temp
-
-                    self.left._size = root_size
-                    self.left.left._size = pivot_size
-
         
         elif direction == "L" and child_side == "R":
             if self.right is not None:
                 if self.right.right is not None:
-                    root_size = self.right._size
-                    pivot_size = root_size
-                    if self.right.right is not None:
-                        pivot_size -= self.right.right._size
-                    if self.right.right.left is not None:
-                        pivot_size += self.right.right.left._size
-
                     temp = self.right
                     self.right = self.right.right
                     temp.right = None
                     if self.right.left is not None:
                         temp.right = self.right.left
                     self.right.left = temp
-
-                    self.right._size = root_size
-                    self.right.left._size = pivot_size
-
-        return self            
-
+        return self
 
     def print_bst(self):
         if self.left is not None:
