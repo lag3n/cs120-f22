@@ -127,25 +127,28 @@ def bfs_2_coloring(G, precolored_nodes=None):
         if len(precolored_nodes) == G.N:
             return G.colors
     
-    # DONE: Complete this function by implementing two-coloring using the colors 0 and 1.
+    # TODO: Complete this function by implementing two-coloring using the colors 0 and 1.
     # If there is no valid coloring, reset all the colors to None using G.reset_colors()
-    for vertex in range(G.N):
-      if vertex in visited:
-        continue
-      zero_color, one_color = True, True
-      for adj_vertex in G.edges[vertex]:
-        if G.colors[adj_vertex] == 0:
-          zero_color = False
-        if G.colors[adj_vertex] == 1:
-          one_color = False
-        if zero_color:
-          G.colors[vertex] = 0
-        elif one_color:
-          G.colors[vertex] = 1
-        else:
-          G.reset_colors()
-          return None
-    return G.colors
+    if G.N == 0:
+        return G.colors
+    
+    checking = []
+    visited = []
+    checking.append(0)
+    visited.append(0)
+    G.colors[checking[0]] = 0
+    
+    for index in checking:
+        currentColor = G.colors[index]
+        for vertex in G.edges[index]:
+            if vertex not in visited:
+                G.colors[vertex] = (currentColor + 1) % 2
+                checking.append(vertex)
+                visited.append(vertex)
+        checking.pop(0)
+    
+    G.reset_colors()
+    return None
 
 '''
     Part B: Implement is_independent_set.
@@ -154,10 +157,8 @@ def bfs_2_coloring(G, precolored_nodes=None):
 # Given an instance of the Graph class G and a subset of precolored nodes,
 # Checks if subset is an independent set in G 
 def is_independent_set(G, subset):
-    for vertex in subset:
-      for adj_vertex in G.edges[vertex]:
-        if adj_vertex in subset:
-          return False
+    # TODO: Complete this function
+
     return True
 
 '''
@@ -184,19 +185,13 @@ def is_independent_set(G, subset):
 # If successful, modifies G.colors and returns the coloring.
 # If no coloring is possible, resets all of G's colors to None and returns None.
 def iset_bfs_3_coloring(G):
-    # DONE: Complete this function.
-    for size in range(int(G.N / 3) + 1):
-      for S in combinations(range(G.N), size):
-        if is_independent_set(G, S):
-          G.colors = bfs_2_coloring(G, S)
-          if G.colors:
-            return G.colors
+    # TODO: Complete this function.
+
     G.reset_colors()
     return None
 
-
 # Feel free to add miscellaneous tests below!
 if __name__ == "__main__":
-    G1 = Graph(3).add_edge(0, 1).add_edge(1, 2).add_edge(2, 0)
-    print(bfs_2_coloring(G1))
-    print(iset_bfs_3_coloring(G1))
+    G0 = Graph(2).add_edge(0, 1)
+    print(bfs_2_coloring(G0))
+    print(iset_bfs_3_coloring(G0))
